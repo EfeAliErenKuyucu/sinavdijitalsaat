@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dijital Sınav Saati</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Üst Kontrol & Bilgi Çubuğu -->
+    <header class="top-bar">
+      <div class="brand">
+        <span class="badge">SINAV</span>
+        <h1>Dijital Sınav Saati</h1>
+      </div>
+      <div class="header-actions">
+        <button id="btn-theme" class="icon-btn" title="Karanlık / Aydınlık Tema" aria-label="Tema Değiştir">
+          <svg id="icon-theme" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+          </svg>
+        </button>
+        <button id="btn-sound-toggle" class="icon-btn" title="Ses Açık/Kapalı" aria-label="Ses Durumu">
+          <svg id="icon-sound" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+        <button id="btn-fullscreen" class="icon-btn" title="Tam Ekran (F)" aria-label="Tam Ekran">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Ana Saat Alanı -->
+    <main class="main-display">
+      <div class="clock-card">
+        <div class="exam-status-badge" id="status-badge">AYARLANIYOR</div>
+        <div class="clock-frame">
+          <div class="digital-clock" id="display-time">10:15:00</div>
+        </div>
+        
+        <!-- İsteğe Bağlı Kalan Süre & Hedef Bilgisi -->
+        <div class="details-row" id="details-row">
+          <div class="detail-item">
+            <span class="detail-label">Başlangıç:</span>
+            <span class="detail-value" id="val-start">10:15</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Bitiş:</span>
+            <span class="detail-value highlight" id="val-end">12:30</span>
+          </div>
+          <div class="detail-item" id="remaining-container">
+            <span class="detail-label">Kalan Süre:</span>
+            <span class="detail-value" id="val-remaining">02:15:00</span>
+          </div>
+        </div>
+
+        <!-- İlerleme Çubuğu -->
+        <div class="progress-wrapper" id="progress-wrapper">
+          <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Aksiyon & Kısayol Barı -->
+      <div class="action-bar">
+        <button id="btn-start" class="btn btn-primary">
+          <span class="btn-icon">▶</span>
+          <span class="btn-text">Başlat</span>
+        </button>
+        <button id="btn-pause" class="btn btn-warning" disabled>
+          <span class="btn-icon">⏸</span>
+          <span class="btn-text">Duraklat</span>
+        </button>
+        <button id="btn-reset" class="btn btn-secondary">
+          <span class="btn-icon">↺</span>
+          <span class="btn-text">Sıfırla</span>
+        </button>
+      </div>
+
+      <div class="shortcut-tip">
+        <kbd>Space</kbd> tuşuna basarak hızlıca duraklatabilir veya devam ettirebilirsiniz.
+      </div>
+    </main>
+
+    <!-- Ayarlar Bölümü -->
+    <section class="settings-panel">
+      <div class="settings-header">
+        <h2>Sınav Ayarları</h2>
+      </div>
+
+      <!-- Hızlı Sınav Şablonları -->
+      <div class="presets-section">
+        <span class="section-label">Hızlı Sınav Seçimi:</span>
+        <div class="presets-grid">
+          <button class="preset-btn" data-time="10:15" data-duration="165">TYT (165 dk)</button>
+          <button class="preset-btn" data-time="10:15" data-duration="180">AYT (180 dk)</button>
+          <button class="preset-btn" data-time="10:15" data-duration="135">MSÜ / DGS (135 dk)</button>
+          <button class="preset-btn" data-time="10:15" data-duration="130">KPSS (130 dk)</button>
+          <button class="preset-btn" data-time="09:30" data-duration="75">LGS 1 (75 dk)</button>
+          <button class="preset-btn" data-time="11:30" data-duration="80">LGS 2 (80 dk)</button>
+        </div>
+      </div>
+
+      <!-- Saat Rengi Seçimi -->
+      <div class="color-section">
+        <span class="section-label">Dijital Saat Rengi:</span>
+        <div class="color-palette">
+          <button class="color-swatch active" data-color="#38bdf8" style="--swatch-color: #38bdf8;" title="Gökyüzü Mavisi / Cyan"></button>
+          <button class="color-swatch" data-color="#ef4444" style="--swatch-color: #ef4444;" title="Klasik LED Kırmızı"></button>
+          <button class="color-swatch" data-color="#22c55e" style="--swatch-color: #22c55e;" title="Retro LED Yeşil"></button>
+          <button class="color-swatch" data-color="#f59e0b" style="--swatch-color: #f59e0b;" title="Amber / Sarı"></button>
+          <button class="color-swatch" data-color="#a855f7" style="--swatch-color: #a855f7;" title="Neon Mor"></button>
+          <button class="color-swatch" data-color="#f8fafc" style="--swatch-color: #f8fafc;" title="Saf Beyaz"></button>
+          <label class="custom-color-picker-wrapper" title="Özel Renk Seç">
+            <input type="color" id="input-clock-color" value="#38bdf8">
+            <span class="color-picker-label">🎨 Özel</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Özel Parametreler -->
+      <div class="custom-inputs-grid">
+        <div class="input-group">
+          <label for="input-start-time">Başlangıç Saati</label>
+          <div class="input-with-button">
+            <input type="time" id="input-start-time" value="10:15" step="60" required>
+            <button id="btn-current-time" class="btn-inline" title="Şu anki saati başlangıç yap">Şu An</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="input-duration">Sınav Süresi (Dakika)</label>
+          <input type="number" id="input-duration" min="1" max="600" value="135" required>
+        </div>
+
+        <div class="input-group">
+          <label>Hesaplanan Bitiş Saati</label>
+          <div class="static-input-display" id="calculated-end-time">12:30</div>
+        </div>
+      </div>
+
+      <!-- Ek Özellik Tercihleri -->
+      <div class="toggles-grid">
+        <label class="toggle-item">
+          <input type="checkbox" id="chk-show-remaining" checked>
+          <span class="toggle-switch"></span>
+          <span class="toggle-label">Kalan Süreyi ve İlerleme Çubuğunu Göster</span>
+        </label>
+        <label class="toggle-item">
+          <input type="checkbox" id="chk-prevent-sleep" checked>
+          <span class="toggle-switch"></span>
+          <span class="toggle-label">Ekranın Kapanmasını Engelle (WakeLock)</span>
+        </label>
+      </div>
+    </section>
+  </div>
+
+  <!-- Süre Doldu Modal Uyarısı -->
+  <div class="modal-overlay" id="time-up-modal">
+    <div class="modal-card">
+      <div class="modal-icon-pulse">🔔</div>
+      <h2 class="modal-title">SÜRE DOLDU!</h2>
+      <p class="modal-desc">Sınav süreniz tamamlandı. Lütfen kalemleri bırakınız ve yanıtlarınızı kontrol etmeyi durdurunuz.</p>
+      <div class="modal-time-summary">
+        Toplam Süre: <strong id="modal-total-duration">135</strong> Dakika
+      </div>
+      <div class="modal-actions">
+        <button id="btn-modal-stop-sound" class="btn btn-secondary">Alarmı Sustur</button>
+        <button id="btn-modal-restart" class="btn btn-primary">Yeniden Başlat</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
